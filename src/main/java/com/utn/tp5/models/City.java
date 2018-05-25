@@ -16,7 +16,7 @@ import javax.persistence.Column;
 @Entity
 @Setter
 @Getter
-public class airport {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +29,12 @@ public class airport {
     @Column(name = "iata")
     private String iata;
 
-    public airport(String name, String iata) {
+    @Column(name = "id_state")
+    private int id_state;
+
+    public City(String name, String iata, int id_state) {
         this.name = name;
         this.iata = iata;
+        this.id_state = id_state;
     }
 }
