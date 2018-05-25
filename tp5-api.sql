@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-05-2018 a las 22:47:55
+-- Tiempo de generación: 25-05-2018 a las 23:16:17
 -- Versión del servidor: 5.7.20
 -- Versión de PHP: 7.1.14
 
@@ -68,7 +68,7 @@ CREATE TABLE `cities` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `id_state` int(11) DEFAULT NULL,
-  `iata` int(11) DEFAULT NULL
+  `iata` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -119,7 +119,7 @@ CREATE TABLE `states` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `id_country` int(11) DEFAULT NULL,
-  `iata` int(11) DEFAULT NULL
+  `iata` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
