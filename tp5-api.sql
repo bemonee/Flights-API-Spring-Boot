@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-05-2018 a las 22:47:55
+-- Tiempo de generación: 26-05-2018 a las 03:43:45
 -- Versión del servidor: 5.7.20
 -- Versión de PHP: 7.1.14
 
@@ -30,9 +30,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `airports` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `iata` varchar(50) DEFAULT NULL,
-  `id_cities` int(11) DEFAULT NULL
+  `name` varchar(50) NOT NULL,
+  `iata` varchar(50) NOT NULL,
+  `id_cities` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -43,8 +43,8 @@ CREATE TABLE `airports` (
 
 CREATE TABLE `cabinRoutes` (
   `id` int(11) NOT NULL,
-  `id_cabin` int(11) DEFAULT NULL,
-  `id_route` int(11) DEFAULT NULL
+  `id_cabin` int(11) NOT NULL,
+  `id_route` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -55,7 +55,7 @@ CREATE TABLE `cabinRoutes` (
 
 CREATE TABLE `cabins` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -66,10 +66,17 @@ CREATE TABLE `cabins` (
 
 CREATE TABLE `cities` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `id_state` int(11) DEFAULT NULL,
-  `iata` int(11) DEFAULT NULL
+  `name` varchar(50) NOT NULL,
+  `id_state` int(11) NOT NULL,
+  `iata` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `cities`
+--
+
+INSERT INTO `cities` (`id`, `name`, `id_state`, `iata`) VALUES
+(1, 'mar del plata', 1, 'mdq');
 
 -- --------------------------------------------------------
 
@@ -79,9 +86,17 @@ CREATE TABLE `cities` (
 
 CREATE TABLE `countries` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `iso2` varchar(10) DEFAULT NULL
+  `name` varchar(50) NOT NULL,
+  `iso2` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `countries`
+--
+
+INSERT INTO `countries` (`id`, `name`, `iso2`) VALUES
+(1, 'argentina', 'ARG'),
+(2, 'bolivia', 'BOL');
 
 -- --------------------------------------------------------
 
@@ -91,10 +106,10 @@ CREATE TABLE `countries` (
 
 CREATE TABLE `prices` (
   `id` int(11) NOT NULL,
-  `from` date DEFAULT NULL,
-  `to` date DEFAULT NULL,
-  `price` double DEFAULT NULL,
-  `id_cabinRoutes` int(11) DEFAULT NULL
+  `from` date NOT NULL,
+  `to` date NOT NULL,
+  `price` double NOT NULL,
+  `id_cabinRoutes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -105,8 +120,8 @@ CREATE TABLE `prices` (
 
 CREATE TABLE `routes` (
   `id` int(11) NOT NULL,
-  `origin_airport_id` int(11) DEFAULT NULL,
-  `destination_airport_id` int(11) DEFAULT NULL
+  `origin_airport_id` int(11) NOT NULL,
+  `destination_airport_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -117,10 +132,17 @@ CREATE TABLE `routes` (
 
 CREATE TABLE `states` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `id_country` int(11) DEFAULT NULL,
-  `iata` int(11) DEFAULT NULL
+  `name` varchar(50) NOT NULL,
+  `id_country` int(11) NOT NULL,
+  `iata` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `states`
+--
+
+INSERT INTO `states` (`id`, `name`, `id_country`, `iata`) VALUES
+(1, 'buenos aires', 1, 'bsas');
 
 --
 -- Índices para tablas volcadas
@@ -202,7 +224,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT de la tabla `airports`
 --
 ALTER TABLE `airports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `cabinRoutes`
@@ -220,13 +242,13 @@ ALTER TABLE `cabins`
 -- AUTO_INCREMENT de la tabla `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `prices`
@@ -244,7 +266,7 @@ ALTER TABLE `routes`
 -- AUTO_INCREMENT de la tabla `states`
 --
 ALTER TABLE `states`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas

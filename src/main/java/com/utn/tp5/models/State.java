@@ -1,27 +1,24 @@
 package com.utn.tp5.models;
 
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.Getter;
 import lombok.Data;
 import lombok.ToString;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
 
 @Entity
-@Setter
-@Getter
+@Table(name = "states")
 public class State {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -29,12 +26,55 @@ public class State {
     @Column(name = "iata")
     private String iata;
 
-    @Column(name = "id_country")
-    private int id_country;
+    @ManyToOne
+    @JoinColumn(name = "id_country")
+    @JsonManagedReference
+    private Country country;
 
-    public State(String name, String iata, int id_country) {
+    @OneToMany(mappedBy = "state")
+    @JsonBackReference
+    private List<City> cities;
+
+    public State() {
+    }
+
+    @JsonGetter
+    public String getName() {
+        return name;
+    }
+
+    @JsonGetter
+    public String getIata() {
+        return iata;
+    }
+
+    @JsonGetter
+    public Country getCountry() {
+        return country;
+    }
+
+    @JsonGetter
+    public List<City> getCities() {
+        return cities;
+    }
+
+    @JsonSetter
+    public void setName(String name) {
         this.name = name;
+    }
+
+    @JsonSetter
+    public void setIata(String iata) {
         this.iata = iata;
-        this.id_country = id_country;
+    }
+
+    @JsonSetter
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    @JsonSetter
+    public void setCities(List<City> cities) {
+        this.cities = cities;
     }
 }
