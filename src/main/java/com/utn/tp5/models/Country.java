@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
+@JsonSerialize
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "countries")
 public class Country {
@@ -33,6 +34,11 @@ public class Country {
     private List<State> states;
 
     public Country() {
+    }
+
+    @JsonGetter
+    public long getId() {
+        return id;
     }
 
     @JsonGetter

@@ -27,6 +27,10 @@ public class Route {
     @JsonManagedReference(value="destinarionRoute-list")
     private Airport airportDestination;
 
+    @OneToOne(mappedBy = "route")
+    @JoinColumn(name = "id_route")
+    private CabinRoutes route;
+
     public Route() {
     }
 

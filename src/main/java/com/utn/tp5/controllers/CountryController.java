@@ -1,12 +1,18 @@
 package com.utn.tp5.controllers;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.utn.tp5.models.Country;
 import java.util.List;
 import com.utn.tp5.exception.ResourceNotFoundException;
 
 import com.utn.tp5.services.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 
@@ -26,8 +32,8 @@ public class CountryController {
 
     // Get a Single Country
     @GetMapping("/countries/{id}")
-    public Country getCountryById(@PathVariable(value = "id") Long Id) {
-        return countryService.getById(Id);
+    public Country getCountryById(@PathVariable(value = "id") Long id) {
+        return countryService.getById(id);
                 /*.orElseThrow(() -> new ResourceNotFoundException("Country", "id", Id));*/
     }
 
@@ -36,6 +42,29 @@ public class CountryController {
     public Country createCountry(@Valid @RequestBody Country country) {
         return countryService.save(country);
     }
+
+    @RequestMapping(value="/country",method=RequestMethod.POST,consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, produces={MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody Country addProduct(@RequestBody Country country){
+
+        return countryService.save(country);
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ResponseEntity<Void> createUser(@RequestBody Country user,    UriComponentsBuilder ucBuilder) {
+        System.out.println("Creating User " + user.getName());
+
+        /*if (countryService.getById(user)) {
+            System.out.println("A User with name " + user.getName() + " already exist");
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }*/
+
+        countryService.save(user);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
     // Update a Country
     @PutMapping("/countries/{id}")
     public Country updateNote(@PathVariable(value = "id") Long noteId,
