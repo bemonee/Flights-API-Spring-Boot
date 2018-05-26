@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.Getter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "airports")
 public class Airport {
 
@@ -21,15 +23,15 @@ public class Airport {
     private long id;
 
     @OneToMany(mappedBy = "airportOrigin")
-    @JsonBackReference
+    @JsonBackReference(value="originRoute-list")
     private List<Route> originRoutes;
 
     @OneToMany(mappedBy = "airportDestination")
-    @JsonBackReference
+    @JsonBackReference(value="destinarionRoute-list")
     private List<Route> destinationRoutes;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonManagedReference(value="airport-list")
     @JoinColumn(name = "id_city")
     private City city;
 

@@ -7,11 +7,14 @@ import lombok.Setter;
 import lombok.Getter;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.util.List;
 
 import javax.persistence.*;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "states")
 public class State {
 
@@ -28,11 +31,11 @@ public class State {
 
     @ManyToOne
     @JoinColumn(name = "id_country")
-    @JsonManagedReference
+    @JsonManagedReference(value="states-list")
     private Country country;
 
     @OneToMany(mappedBy = "state")
-    @JsonBackReference
+    @JsonBackReference(value="city-list")
     private List<City> cities;
 
     public State() {

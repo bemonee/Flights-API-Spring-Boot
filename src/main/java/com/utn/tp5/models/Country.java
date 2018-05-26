@@ -1,14 +1,18 @@
 package com.utn.tp5.models;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "countries")
 public class Country {
     @Id
@@ -17,13 +21,15 @@ public class Country {
     private long id;
 
     @Column(name = "name")
+    @NotBlank
     private String name;
 
     @Column(name = "iso2")
+    @NotBlank
     private String iso2;
 
     @OneToMany(mappedBy = "country")
-    @JsonBackReference
+    @JsonBackReference(value="states-list")
     private List<State> states;
 
     public Country() {
