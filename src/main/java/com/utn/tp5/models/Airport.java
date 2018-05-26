@@ -1,6 +1,5 @@
 package com.utn.tp5.models;
 
-
 import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
 import lombok.Setter;

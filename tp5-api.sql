@@ -69,6 +69,7 @@ CREATE TABLE `cities` (
   `name` varchar(50) NOT NULL,
   `id_state` int(11) NOT NULL,
   `iata` varchar(10) NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -135,6 +136,7 @@ CREATE TABLE `states` (
   `name` varchar(50) NOT NULL,
   `id_country` int(11) NOT NULL,
   `iata` varchar(10) NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
