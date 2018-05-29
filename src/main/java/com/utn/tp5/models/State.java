@@ -1,83 +1,40 @@
 package com.utn.tp5.models;
 
-
-import com.fasterxml.jackson.annotation.*;
-import lombok.AccessLevel;
-import lombok.Setter;
-import lombok.Getter;
-import lombok.Data;
-import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "states")
+/**
+ *
+ * @author Ramiro Agustin Pereyra Noreiko <bemonee@gmail.com>
+ */
+@Entity(name = "states")
+@NoArgsConstructor
+@Getter
+@Setter
 public class State {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private Long id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "iata")
-    private String iata;
-
-    @ManyToOne
     @JoinColumn(name = "id_country")
-    @JsonManagedReference(value="states-list")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
-    @OneToMany(mappedBy = "state")
-    @JsonBackReference(value="city-list")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
     private List<City> cities;
 
-    public State() {
-    }
+    private String name;
 
-    @JsonGetter
-    public String getName() {
-        return name;
-    }
-
-    @JsonGetter
-    public String getIata() {
-        return iata;
-    }
-
-    @JsonGetter
-    public Country getCountry() {
-        return country;
-    }
-
-    @JsonGetter
-    public List<City> getCities() {
-        return cities;
-    }
-
-    @JsonSetter
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonSetter
-    public void setIata(String iata) {
-        this.iata = iata;
-    }
-
-    @JsonSetter
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    @JsonSetter
-    public void setCities(List<City> cities) {
-        this.cities = cities;
-    }
+    private String iata;
 }

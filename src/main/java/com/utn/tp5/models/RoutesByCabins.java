@@ -1,7 +1,6 @@
 package com.utn.tp5.models;
 
-import java.time.LocalDate;
-import javax.persistence.Column;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,25 +17,24 @@ import lombok.Setter;
  *
  * @author Ramiro Agustin Pereyra Noreiko <bemonee@gmail.com>
  */
-@Entity(name = "prices")
+@Entity(name = "routes_by_cabins")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Price {
+public class RoutesByCabins {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "id_rbc")
+    @JoinColumn(name = "id_route")
     @ManyToOne(fetch = FetchType.LAZY)
-    private RoutesByCabins routeByCabin;
+    private Route route;
 
-    @Column(name = "from_date")
-    private LocalDate fromDate;
+    @JoinColumn(name = "id_cabin")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Cabin cabin;
 
-    @Column(name = "to_date")
-    private LocalDate toDate;
-
-    private double price;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "routeByCabin")
+    private List<Price> prices;
 }
