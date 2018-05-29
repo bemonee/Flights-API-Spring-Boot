@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.utn.tp5.models.State;
 import com.utn.tp5.repositories.StateRepository;
 
+import lombok.NoArgsConstructor;
+
 @Service
+@NoArgsConstructor
 public class StateService {
 
 	@Autowired
@@ -18,7 +21,7 @@ public class StateService {
 		return stateRepository.findAll();
 	}
 
-	public State getById(Integer id) {
+	public State getById(Long id) {
 		return stateRepository.getOne(id);
 	}
 

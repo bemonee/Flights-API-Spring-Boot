@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.utn.tp5.models.Country;
 import com.utn.tp5.repositories.CountryRepository;
 
+import lombok.NoArgsConstructor;
+
 @Service
+@NoArgsConstructor
 public class CountryService {
 
 	@Autowired
@@ -18,7 +21,7 @@ public class CountryService {
 		return this.countryRepository.findAll();
 	}
 
-	public Country getById(Integer id) {
+	public Country getById(Long id) {
 		return this.countryRepository.getOne(id);
 	}
 

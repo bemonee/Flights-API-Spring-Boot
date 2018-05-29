@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.utn.tp5.models.Airport;
 import com.utn.tp5.repositories.AirportRepository;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class AirportService {
 	@Autowired
 	private AirportRepository cityRepository;
@@ -15,7 +18,7 @@ public class AirportService {
 		return cityRepository.findAll();
 	}
 
-	public Airport getByID(Integer id) {
+	public Airport getByID(Long id) {
 		return cityRepository.getOne(id);
 	}
 
