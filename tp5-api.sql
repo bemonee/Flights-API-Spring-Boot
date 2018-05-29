@@ -24,13 +24,12 @@ USE `tp5-api` ;
 DROP TABLE IF EXISTS `tp5-api`.`countries` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`countries` (
-  `id` INT(11) NULL AUTO_INCREMENT,
+  `id` BIGINT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `iso2` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `countries_iso2_uindex` (`iso2` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -40,8 +39,8 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`states` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`states` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `id_country` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `id_country` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
@@ -49,9 +48,10 @@ CREATE TABLE IF NOT EXISTS `tp5-api`.`states` (
   INDEX `states_countries_id_fk` (`id_country` ASC),
   CONSTRAINT `states_countries_id_fk`
     FOREIGN KEY (`id_country`)
-    REFERENCES `tp5-api`.`countries` (`id`))
+    REFERENCES `tp5-api`.`countries` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -61,8 +61,8 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`cities` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`cities` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `id_state` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `id_state` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
@@ -71,9 +71,9 @@ CREATE TABLE IF NOT EXISTS `tp5-api`.`cities` (
   CONSTRAINT `cities_states_id_fk`
     FOREIGN KEY (`id_state`)
     REFERENCES `tp5-api`.`states` (`id`)
-    ON UPDATE RESTRICT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -83,8 +83,8 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`airports` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`airports` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `id_city` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `id_city` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`),
@@ -93,10 +93,9 @@ CREATE TABLE IF NOT EXISTS `tp5-api`.`airports` (
   CONSTRAINT `airports_cities_id_fk`
     FOREIGN KEY (`id_city`)
     REFERENCES `tp5-api`.`cities` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -106,7 +105,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`cabins` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`cabins` (
-  `id` INT(11) NULL AUTO_INCREMENT,
+  `id` BIGINT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -119,9 +118,9 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`routes` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`routes` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `origin_airport_id` INT(11) NOT NULL,
-  `destination_airport_id` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `origin_airport_id` BIGINT NOT NULL,
+  `destination_airport_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `rutas_airports_id_fk` (`origin_airport_id` ASC),
   INDEX `rutas_airports_id_fk_2` (`destination_airport_id` ASC),
@@ -147,9 +146,9 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`routes_by_cabins` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`routes_by_cabins` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `id_cabin` INT(11) NOT NULL,
-  `id_route` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `id_cabin` BIGINT NOT NULL,
+  `id_route` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `cabinRoutes_cabins_id_fk` (`id_cabin` ASC),
   INDEX `cabinRoutes_routes_id_fk` (`id_route` ASC),
@@ -175,8 +174,8 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`prices` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`prices` (
-  `id` INT(11) NULL AUTO_INCREMENT,
-  `id_rbc` INT(11) NOT NULL,
+  `id` BIGINT NULL AUTO_INCREMENT,
+  `id_rbc` BIGINT NOT NULL,
   `from_date` DATE NOT NULL,
   `to_date` DATE NOT NULL,
   `price` DOUBLE NOT NULL,

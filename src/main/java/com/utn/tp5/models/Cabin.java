@@ -1,12 +1,16 @@
 package com.utn.tp5.models;
 
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,12 +25,13 @@ import lombok.Setter;
 @Setter
 public class Cabin {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cabin")
-    private List<RoutesByCabins> routesByCabins;
+	private String name;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cabin")
+	@JsonManagedReference
+	private List<RoutesByCabins> routesByCabins;
 }

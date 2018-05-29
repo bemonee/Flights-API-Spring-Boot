@@ -1,6 +1,7 @@
 package com.utn.tp5.models;
 
 import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,19 +27,20 @@ import lombok.Setter;
 @Setter
 public class Price {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @JoinColumn(name = "id_rbc")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private RoutesByCabins routeByCabin;
+	@JoinColumn(name = "id_rbc")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private RoutesByCabins routeByCabin;
 
-    @Column(name = "from_date")
-    private LocalDate fromDate;
+	@Column(name = "from_date")
+	private LocalDate fromDate;
 
-    @Column(name = "to_date")
-    private LocalDate toDate;
+	@Column(name = "to_date")
+	private LocalDate toDate;
 
-    private double price;
+	private double price;
 }

@@ -1,6 +1,7 @@
 package com.utn.tp5.models;
 
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,18 +28,20 @@ import lombok.Setter;
 @Setter
 public class City {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @JoinColumn(name = "id_state")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private State state;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
-    private List<City> cities;
+	@JoinColumn(name = "id_state")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private State state;
 
-    private String name;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
+	@JsonManagedReference
+	private List<Airport> airports;
 
-    private String iata;
+	private String name;
+
+	private String iata;
 }

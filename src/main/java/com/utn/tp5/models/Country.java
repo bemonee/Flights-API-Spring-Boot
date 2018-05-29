@@ -1,12 +1,16 @@
 package com.utn.tp5.models;
 
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,14 +25,15 @@ import lombok.Setter;
 @Setter
 public class Country {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
-    private List<State> states;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
+	@JsonManagedReference
+	private List<State> states;
 
-    private String name;
+	private String name;
 
-    private String iso2;
+	private String iso2;
 }

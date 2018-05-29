@@ -1,6 +1,7 @@
 package com.utn.tp5.models;
 
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,18 +28,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Route {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @JoinColumn(name = "origin_airport_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Airport originAirport;
+	@JoinColumn(name = "origin_airport_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Airport originAirport;
 
-    @JoinColumn(name = "destination_airport_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Airport destinationAiport;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
-    private List<RoutesByCabins> routesByCabins;
+	@JoinColumn(name = "destination_airport_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Airport destinationAiport;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
+	@JsonManagedReference
+	private List<RoutesByCabins> routesByCabins;
 }

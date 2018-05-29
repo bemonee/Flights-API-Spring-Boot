@@ -1,6 +1,7 @@
 package com.utn.tp5.models;
 
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,21 +28,24 @@ import lombok.Setter;
 @Setter
 public class Airport {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String iata;
+	private String iata;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "originAirport")
-    private List<Route> originRoutes;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "originAirport")
+	@JsonManagedReference
+	private List<Route> originRoutes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationAiport")
-    private List<Route> destinationRoutes;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationAiport")
+	@JsonManagedReference
+	private List<Route> destinationRoutes;
 
-    @JoinColumn(name = "id_city")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private City city;
+	@JoinColumn(name = "id_city")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private City city;
 }

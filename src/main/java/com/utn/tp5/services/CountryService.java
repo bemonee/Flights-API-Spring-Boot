@@ -1,30 +1,32 @@
 package com.utn.tp5.services;
-import com.utn.tp5.models.Country;
+
 import java.util.List;
 
-import com.utn.tp5.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utn.tp5.models.Country;
+import com.utn.tp5.repositories.CountryRepository;
+
 @Service
-public class CountryService{
+public class CountryService {
 
-    @Autowired
-    private CountryRepository countryRepository;
+	@Autowired
+	private CountryRepository countryRepository;
 
-    public List<Country> getAll() {
-        return countryRepository.findAll();
-    }
+	public List<Country> getAll() {
+		return this.countryRepository.findAll();
+	}
 
-    public Country getById(long id) {
-        return countryRepository.findById(id);
-    }
+	public Country getById(Integer id) {
+		return this.countryRepository.getOne(id);
+	}
 
-    public Country save(Country country) {
-        return countryRepository.save(country);
-    }
+	public Country save(Country country) {
+		return this.countryRepository.save(country);
+	}
 
-    public void delete(Country country) {
-        countryRepository.delete(country);
-    }
+	public void delete(Country country) {
+		this.countryRepository.delete(country);
+	}
 }
