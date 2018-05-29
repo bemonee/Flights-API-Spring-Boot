@@ -22,26 +22,27 @@ import lombok.Setter;
  *
  * @author Ramiro Agustin Pereyra Noreiko <bemonee@gmail.com>
  */
-@Entity(name = "states")
+@Entity(name = "routes_by_cabins")
 @NoArgsConstructor
 @Getter
 @Setter
-public class State {
+public class RoutesByCabins {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn(name = "id_country")
+	@JoinColumn(name = "id_route")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
-	private Country country;
+	private Route route;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
+	@JoinColumn(name = "id_cabin")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Cabin cabin;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "routeByCabin")
 	@JsonManagedReference
-	private List<City> cities;
-
-	private String name;
-
-	private String iata;
+	private List<Price> prices;
 }

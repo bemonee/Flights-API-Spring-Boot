@@ -1,56 +1,48 @@
 package com.utn.tp5.models;
 
-import com.fasterxml.jackson.annotation.*;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "routes")
+/**
+ *
+ * @author Ramiro Agustin Pereyra Noreiko <bemonee@gmail.com>
+ */
+@Entity(name = "routes")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Route {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_origin")
-    @JsonManagedReference(value="originRoute-list")
-    private Airport airportOrigin;
+	@JoinColumn(name = "origin_airport_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Airport originAirport;
 
-    @ManyToOne
-    @JoinColumn(name = "id_destination")
-    @JsonManagedReference(value="destinarionRoute-list")
-    private Airport airportDestination;
+	@JoinColumn(name = "destination_airport_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Airport destinationAiport;
 
-    @OneToOne(mappedBy = "route")
-    @JoinColumn(name = "id_route")
-    private CabinRoutes route;
-
-    public Route() {
-    }
-
-    @JsonGetter
-    public Airport getAirportOrigin() {
-        return airportOrigin;
-    }
-
-    @JsonGetter
-    public Airport getAirportDestination() {
-        return airportDestination;
-    }
-
-    @JsonSetter
-    public void setAirportOrigin(Airport airportOrigin) {
-        this.airportOrigin = airportOrigin;
-    }
-
-    @JsonSetter
-    public void setAirportDestination(Airport airportDestination) {
-        this.airportDestination = airportDestination;
-    }
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
+	@JsonManagedReference
+	private List<RoutesByCabins> routesByCabins;
 }
