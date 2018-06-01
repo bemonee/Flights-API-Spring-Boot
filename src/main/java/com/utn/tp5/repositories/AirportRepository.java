@@ -7,5 +7,5 @@ import com.utn.tp5.models.Airport;
 
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, Long> {
-
+	public Airport findByIata(String iata);
 }
