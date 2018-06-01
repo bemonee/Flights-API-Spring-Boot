@@ -24,7 +24,7 @@ USE `tp5-api` ;
 DROP TABLE IF EXISTS `tp5-api`.`countries` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`countries` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `iso2` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
@@ -39,7 +39,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`states` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`states` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_country` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(10) NOT NULL,
@@ -61,7 +61,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`cities` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`cities` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_state` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(10) NOT NULL,
@@ -83,7 +83,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`airports` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`airports` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_city` BIGINT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `iata` VARCHAR(50) NOT NULL,
@@ -105,7 +105,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`cabins` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`cabins` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -118,7 +118,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`routes` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`routes` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `origin_airport_id` BIGINT NOT NULL,
   `destination_airport_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
@@ -146,7 +146,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`routes_by_cabins` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`routes_by_cabins` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_cabin` BIGINT NOT NULL,
   `id_route` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
@@ -174,7 +174,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `tp5-api`.`prices` ;
 
 CREATE TABLE IF NOT EXISTS `tp5-api`.`prices` (
-  `id` BIGINT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_rbc` BIGINT NOT NULL,
   `from_date` DATE NOT NULL,
   `to_date` DATE NOT NULL,
