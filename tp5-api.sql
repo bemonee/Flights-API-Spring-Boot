@@ -126,13 +126,13 @@ CREATE TABLE IF NOT EXISTS `tp5-api`.`routes` (
   CONSTRAINT `origin_idx`
   FOREIGN KEY (`origin_airport_id`)
   REFERENCES `tp5-api`.`airports` (`id`)
-  ON DELETE NO CASCADE
-  ON UPDATE NO CASCADE,
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
   CONSTRAINT `destination_idx`
   FOREIGN KEY (`destination_airport_id`)
   REFERENCES `tp5-api`.`airports` (`id`)
   ON DELETE CASCADE
-  ON UPDATE CASCADE;
+  ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
@@ -142,22 +142,24 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `tp5-api`.`routes_by_cabins` ;
 
-CREATE TABLE IF NOT EXISTS `tp5-api`.`routes` (
+CREATE TABLE IF NOT EXISTS `tp5-api`.`routes_by_cabins` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `origin_airport_id` BIGINT NOT NULL,
-  `destination_airport_id` BIGINT NOT NULL,
+  `id_cabin` BIGINT NOT NULL,
+  `id_route` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `ruta_unica_idx` (`origin_airport_id` ASC, `destination_airport_id` ASC),
-  CONSTRAINT `origin_idx`
-	FOREIGN KEY (`origin_airport_id`)
-	REFERENCES `tp5-api`.`airports` (`id`)
-	ON DELETE CASCADE
-	ON UPDATE CASCADE,
-  CONSTRAINT `destination_idx`
-	FOREIGN KEY (`destination_airport_id`)
-	REFERENCES `tp5-api`.`airports` (`id`)
-	ON DELETE CASCADE
-	ON UPDATE CASCADE)
+  INDEX `cabinRoutes_cabins_id_fk` (`id_cabin` ASC),
+  INDEX `cabinRoutes_routes_id_fk` (`id_route` ASC),
+  UNIQUE INDEX `cabin_route_ix` (`id_cabin` ASC, `id_route` ASC),
+  CONSTRAINT `cabinRoutes_cabins_id_fk`
+    FOREIGN KEY (`id_cabin`)
+    REFERENCES `tp5-api`.`cabins` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `cabinRoutes_routes_id_fk`
+    FOREIGN KEY (`id_route`)
+    REFERENCES `tp5-api`.`routes` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
