@@ -1,6 +1,7 @@
 package com.utn.tp5.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -27,7 +28,7 @@ public class CountryController {
 
 	@Autowired
 	CountryService countryService;
-
+	/*
 	// Get All Countries
 	@GetMapping("/countries")
 	public List<Country> getAllCountries() {
@@ -38,8 +39,10 @@ public class CountryController {
 	// Get a Single Country
 	@GetMapping("/countries/{id}")
 	public Country getCountryById(@PathVariable(value = "id") Long id) {
-		return countryService.getOne(id);
-		/* .orElseThrow(() -> new ResourceNotFoundException("Country", "id", Id)); */
+		Optional<Country> country;
+		country = countryService.findById(id);
+		return country.get();
+		 .orElseThrow(() -> new ResourceNotFoundException("Country", "id", Id)); 
 	}
 
 	// Create a Country
@@ -52,14 +55,14 @@ public class CountryController {
 	@PutMapping("/countries/{id}")
 	public Country updateNote(@PathVariable(value = "id") Long noteId, @Valid @RequestBody Country countryDetails) {
 
-		Country country = countryService.getOne(noteId);
-		/* .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId)); */
+		Country country = countryService.findById(noteId);
+		 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId)); 
 
 		country.setName(countryDetails.getName());
 		country.setIso2(countryDetails.getIso2());
 
 		Country updatedCountry = countryService.save(country);
 		return updatedCountry;
-	}
+	}*/
 
 }

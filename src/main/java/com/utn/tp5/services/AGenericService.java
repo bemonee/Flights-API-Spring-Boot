@@ -1,6 +1,7 @@
 package com.utn.tp5.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,8 +17,8 @@ public abstract class AGenericService<R extends JpaRepository<M, Long>, M> {
 		this.repo = repo;
 	}
 
-	public M getOne(Long id) {
-		return this.repo.getOne(id);
+	public Optional<M> findById(Long id) {
+		return this.repo.findById(id);
 	}
 
 	public List<M> findAll() {

@@ -7,7 +7,7 @@ import com.utn.tp5.models.State;
 import com.utn.tp5.repositories.StateRepository;
 
 @Service
-public class StateService extends AGenericCrudeableService<StateRepository, State> {
+public class StateService extends AGenericIataService<StateRepository, State> {
 
 	@Autowired
 	public StateService(StateRepository repo) {
