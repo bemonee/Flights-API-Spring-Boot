@@ -41,9 +41,8 @@ public class AirportController {
 	@Autowired
 	GenericConverter<Airport, AirportDTO> converter;
 
-	// Get All Countries
 	@GetMapping("/airports")
-	public ResponseEntity<?> getAllAirports() {
+	public ResponseEntity<?> getAll() {
 		List<Airport> airports = this.airportService.findAll();
 		if (airports.isEmpty()) {
 			return new ResponseEntity<>(airports, HttpStatus.OK); // El recurso existe pero esta vacio, 200
@@ -52,11 +51,10 @@ public class AirportController {
 			airportsDTOs = this.converter.modelsToDTOs(airports, AirportDTO.class);
 			return new ResponseEntity<>(airportsDTOs, HttpStatus.OK);
 		}
-
 	}
 
 	@GetMapping("/airports/{iata}/routes")
-	public ResponseEntity<?> getDestinationAirportsByOriginAiport(@PathVariable(value = "iata") String iata) {
+	public ResponseEntity<?> getDestinationAirportsByOriginAiport(@PathVariable("iata") String iata) {
 		Airport origin = this.airportService.findByIata(iata);
 		if (origin == null) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // El recurso no existe, 404
