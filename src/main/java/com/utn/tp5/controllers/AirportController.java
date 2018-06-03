@@ -129,8 +129,8 @@ public class AirportController {
 	}
 
 	@PatchMapping("/airports/{iata}")
-	public ResponseEntity<?> update(@PathVariable(value = "iata") String iata,
-			@Valid @RequestBody AirportDTO airportDTO) {
+	public ResponseEntity<?> update(@RequestBody AirportDTO airportDTO, @PathVariable("iata") String iata) {
+		
 		Airport airport = this.airportService.findByIata(iata);
 		boolean applyChanges = false;
 		if (airport == null) {
@@ -143,8 +143,8 @@ public class AirportController {
 					return new ResponseEntity<>("El codigo iata debe contener entre 2 y 3 caracteres",
 							HttpStatus.BAD_REQUEST);
 				} else {
-					iataDTO = iata.toUpperCase();
-					Airport checkAirport = this.airportService.findByIata(iata);
+					iataDTO = iataDTO.toUpperCase();
+					Airport checkAirport = this.airportService.findByIata(iataDTO);
 					if (checkAirport != null) {
 						return new ResponseEntity<>("Ya existe un aeropuerto con ese codigo iata", HttpStatus.CONFLICT);
 					} else {
