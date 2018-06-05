@@ -101,9 +101,13 @@ public class RouteController {
 		}
 
 		Route newRoute = new Route();
-		newRoute.setOriginAirport(airportOrigin);
-		newRoute.setDestinationAiport(airportDestination);
-		newRoute = this.routeService.save(newRoute);
+		try {
+			newRoute.setOriginAirport(airportOrigin);
+			newRoute.setDestinationAiport(airportDestination);
+			newRoute = this.routeService.save(newRoute);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(this.converter.modelToDTO(newRoute, RouteDTO.class), HttpStatus.OK);
 	}
 	/* Listar rutas */
@@ -218,7 +222,11 @@ public class RouteController {
 			}
 
 			if (applyChanges) {
-				route = this.routeService.save(route);
+				try {
+					route = this.routeService.save(route);
+				} catch (Exception e) {
+					return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 				return new ResponseEntity<>(this.converter.modelToDTO(route, RouteDTO.class), HttpStatus.OK);
 			}
 			return new ResponseEntity<>("No se encontraron modificaciones a realizar", HttpStatus.BAD_REQUEST);

@@ -8,7 +8,7 @@ public abstract class AGenericCrudeableService<R extends JpaRepository<M, Long>,
 		super(repo);
 	}
 
-	public M save(M model) {
+	public M save(M model) throws Exception {
 		return this.repo.save(model);
 	}
 

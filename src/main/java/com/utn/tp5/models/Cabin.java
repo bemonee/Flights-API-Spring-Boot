@@ -33,5 +33,5 @@ public class Cabin {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cabin")
 	@JsonManagedReference
-	private List<RoutesByCabins> routesByCabins;
+	private List<RouteByCabin> routesByCabins;
 }

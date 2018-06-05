@@ -106,10 +106,14 @@ public class AirportController {
 		}
 
 		Airport airport = new Airport();
-		airport.setIata(iata);
-		airport.setName(name);
-		airport.setCity(city);
-		airport = this.airportService.save(airport);
+		try {
+			airport.setIata(iata);
+			airport.setName(name);
+			airport.setCity(city);
+			airport = this.airportService.save(airport);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(this.converter.modelToDTO(airport, AirportDTO.class), HttpStatus.OK);
 	}
 
@@ -182,7 +186,11 @@ public class AirportController {
 		}
 
 		if (applyChanges) {
-			airport = this.airportService.save(airport);
+			try {
+				airport = this.airportService.save(airport);
+			} catch (Exception e) {
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 			return new ResponseEntity<>(this.converter.modelToDTO(airport, AirportDTO.class), HttpStatus.OK);
 		}
 		return new ResponseEntity<>("No se encontraron modificaciones a realizar", HttpStatus.BAD_REQUEST);

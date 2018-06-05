@@ -44,5 +44,5 @@ public class Route {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
 	@JsonManagedReference
-	private List<RoutesByCabins> routesByCabins;
+	private List<RouteByCabin> routesByCabins;
 }

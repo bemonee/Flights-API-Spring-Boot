@@ -26,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RoutesByCabins {
+public class RouteByCabin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -60,7 +60,11 @@ public class CabinController {
 		}
 
 		Cabin cabin = this.converter.DtoToModel(cabinDTO, Cabin.class);
-		cabin = this.cabinService.save(cabin);
+		try {
+			cabin = this.cabinService.save(cabin);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(this.converter.modelToDTO(cabin, CabinDTO.class), HttpStatus.OK);
 	}
 
@@ -98,8 +102,12 @@ public class CabinController {
 		}
 
 		Cabin cabin = checkCabin.get();
-		cabin.setName(name);
-		cabin = this.cabinService.save(cabin);
+		try {
+			cabin.setName(name);
+			cabin = this.cabinService.save(cabin);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(this.converter.modelToDTO(cabin, CabinDTO.class), HttpStatus.OK);
 	}
 }

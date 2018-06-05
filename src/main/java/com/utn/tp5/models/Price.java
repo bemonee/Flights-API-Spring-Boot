@@ -34,7 +34,7 @@ public class Price {
 	@JoinColumn(name = "id_rbc")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
-	private RoutesByCabins routeByCabin;
+	private RouteByCabin routeByCabin;
 
 	@Column(name = "from_date")
 	private LocalDate fromDate;
