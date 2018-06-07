@@ -23,6 +23,21 @@ public class PriceService extends AGenericCrudeableService<PriceRepository, Pric
 		super(repo);
 	}
 
+	public Price findPriceByCabinAndRouteAndDate(Route route, Cabin cabin, LocalDate date) {
+		Price needle = this.initAuxiliarPrice(route, cabin, date);
+		return this.getPriceInSameDates(needle);
+	}
+	
+	
+
+	@Override
+	public Price save(Price price) throws Exception {
+		if (this.alreadyExistPriceInSameDates(price)) {
+			throw new Exception("Ya existe un precio para la misma ruta y cabina en esas fechas");
+		}
+		return super.save(price);
+	}
+
 	public Price save(Price price, Route route, Cabin cabin) throws Exception {
 		if (price.getRouteByCabin() == null) {
 			RouteByCabin routeByCabin = this.routeByCabinService.findByCabinAndRoute(cabin, route);
@@ -59,12 +74,9 @@ public class PriceService extends AGenericCrudeableService<PriceRepository, Pric
 	}
 
 	public void delete(Route route, Cabin cabin, LocalDate date) throws Exception {
-		Price price = new Price();
-		RouteByCabin routeByCabin = this.routeByCabinService.findByCabinAndRoute(cabin, route);
-		if (routeByCabin != null) {
-			price.setFromDate(date);
-			price.setToDate(date);
-			price = this.getPriceInSameDates(price);
+		Price needle = this.initAuxiliarPrice(route, cabin, date);
+		if (needle.getRouteByCabin() != null) {
+			Price price = this.getPriceInSameDates(needle);
 			if (price != null) {
 				super.delete(price);
 			} else {
@@ -112,5 +124,14 @@ public class PriceService extends AGenericCrudeableService<PriceRepository, Pric
 
 	public boolean alreadyExistPriceInSameDates(Price price) {
 		return (this.getPriceInSameDates(price) != null);
+	}
+	
+	private Price initAuxiliarPrice(Route route, Cabin cabin, LocalDate date) {
+		Price price = new Price();
+		price.setFromDate(date);
+		price.setToDate(date);
+		RouteByCabin routeByCabin = this.routeByCabinService.findByCabinAndRoute(cabin, route);
+		price.setRouteByCabin(routeByCabin);
+		return price;
 	}
 }
