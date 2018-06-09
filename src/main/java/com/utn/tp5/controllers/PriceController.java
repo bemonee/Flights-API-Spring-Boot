@@ -349,7 +349,8 @@ public class PriceController {
 				if (!newCabin.isPresent()) {
 					return new ResponseEntity<>("La nueva cabina es inexistente.", HttpStatus.BAD_REQUEST);
 				} else { // Cambio la cabina, verifico la existencia de esa ruta por cabina
-					RouteByCabin auxRbc = this.routeByCabinService.findByCabinAndRoute(newCabin.get(), oldRbc.getRoute());
+					RouteByCabin auxRbc = this.routeByCabinService.findByCabinAndRoute(newCabin.get(),
+							oldRbc.getRoute());
 					if (auxRbc == null) {
 						return new ResponseEntity<>("No se admiten vuelos para la nueva cabina y la ruta"
 								+ oldRbc.getRoute().getOriginAirport().getIata() + "-"
@@ -394,7 +395,40 @@ public class PriceController {
 		} else {
 			return new ResponseEntity<>("No se encontraron modificaciones a realizar", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return new ResponseEntity<>(this.converter.modelToDTO(price, PriceDTO.class), HttpStatus.OK);
+	}
+
+	@GetMapping("/prices/{originIata}/{destinationIata}/{fromDate}/{toDate}")
+	public ResponseEntity<?> getPricesByRouteAndDates(@PathVariable("originIata") String originIata,
+			@PathVariable("destinationIata") String destinationIata,
+			@PathVariable("fromDate") @DateTimeFormat(iso = ISO.DATE) LocalDate fromDate,
+			@PathVariable("toDate") @DateTimeFormat(iso = ISO.DATE) LocalDate toDate) {
+
+		Airport originAirport = this.airportService.findByIata(originIata);
+		if (originAirport == null) {
+			return new ResponseEntity<>("El iata del aeropuerto origen es incorrecto", HttpStatus.BAD_REQUEST);
+		}
+
+		Airport destinationAirport = this.airportService.findByIata(destinationIata);
+		if (destinationAirport == null) {
+			return new ResponseEntity<>("El iata del aeropuerto destino es incorrecto", HttpStatus.BAD_REQUEST);
+		}
+
+		if (fromDate.isAfter(toDate)) {
+			return new ResponseEntity<>("La fecha de inicio no puede ser menor a la fecha de fin",
+					HttpStatus.BAD_REQUEST);
+		}
+		
+		Route route = this.routeService.findByOriginAndDestination(originAirport, destinationAirport);
+		if (route == null) {
+			return new ResponseEntity<>("La ruta ingresada es inexistente", HttpStatus.BAD_REQUEST);
+		}
+
+		List<Price> prices = this.priceService.findByRouteAndDates(route, fromDate, toDate);
+		if (prices.isEmpty()) {
+			return new ResponseEntity<>(prices, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(this.converter.modelsToDTOs(prices, PriceDTO.class), HttpStatus.OK);
 	}
 }

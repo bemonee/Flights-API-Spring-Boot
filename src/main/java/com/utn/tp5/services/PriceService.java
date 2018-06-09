@@ -134,4 +134,8 @@ public class PriceService extends AGenericCrudeableService<PriceRepository, Pric
 		price.setRouteByCabin(routeByCabin);
 		return price;
 	}
+	
+	public List<Price> findByRouteAndDates(Route route, LocalDate fromDate, LocalDate toDate){
+		return this.repo.findByRouteAndDates(route, fromDate, toDate);
+	}
 }
