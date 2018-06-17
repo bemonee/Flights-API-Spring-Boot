@@ -2,6 +2,7 @@ package com.utn.tp5.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class Cabin {
 
 	private String name;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cabin")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cabin", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<RouteByCabin> routesByCabins;
 }
