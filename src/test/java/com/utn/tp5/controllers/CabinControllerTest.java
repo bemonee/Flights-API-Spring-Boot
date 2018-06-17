@@ -74,7 +74,11 @@ public class CabinControllerTest {
 		cabinDTO.setId(new Long(1));
 		cabinDTO.setName("Turista");
 
-		Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
+		Cabin cabin = new Cabin();
+		cabin.setId(new Long(1));
+		cabin.setName("Turista");
+		
+		//Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonContent = mapper.writeValueAsString(cabinDTO);
