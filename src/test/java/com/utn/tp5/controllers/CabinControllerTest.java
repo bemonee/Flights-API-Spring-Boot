@@ -68,17 +68,40 @@ public class CabinControllerTest {
 	}
 
 	@Test
+	public void getVerbCanReturnEmpty() throws Exception {
+
+		List<Cabin> cabins = new ArrayList<>();
+		Cabin cabin = new Cabin();
+		cabin.setId(new Long(1));
+		cabin.setName("Turista");
+
+
+		List<CabinDTO> cabinDtos = new ArrayList<>();
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+		cabinDTO.setName("Turista");
+		cabinDtos.add(cabinDTO);
+
+		Mockito.when(cabinService.findAll()).thenReturn(cabins);
+		ResultActions result = this.mockMvc.perform(get("/api/cabins")).andDo(print()).andExpect(status().isOk());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("[]");
+
+	}
+
+	@Test
 	public void postVerbShouldReturnDto() throws Exception {
 
 		CabinDTO cabinDTO = new CabinDTO();
 		cabinDTO.setId(new Long(1));
 		cabinDTO.setName("Turista");
 
-		/*Cabin cabin = new Cabin();
+		Cabin cabin = new Cabin();
 		cabin.setId(new Long(1));
-		cabin.setName("Turista");*/
+		cabin.setName("Turista");
 
-		Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
+		//Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonContent = mapper.writeValueAsString(cabinDTO);
@@ -101,6 +124,64 @@ public class CabinControllerTest {
 	}
 
 	@Test
+	public void postVerbShouldHaveName() throws Exception {
+
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+
+		Cabin cabin = new Cabin();
+		cabin.setId(new Long(1));
+
+		//Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(cabinDTO);
+
+		Mockito.when(converter.DtoToModel(cabinDTO, Cabin.class)).thenReturn(cabin);
+		Mockito.when(cabinService.save(cabin)).thenReturn(cabin);
+		Mockito.when(converter.modelToDTO(cabin, CabinDTO.class)).thenReturn(cabinDTO);
+		ResultActions result = this.mockMvc.perform(post("/api/cabins")
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest());
+
+
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("El nombre de la cabina es obligatorio");
+
+	}
+
+	@Test
+	public void postVerbShouldBeValid() throws Exception {
+
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+		cabinDTO.setName("T");
+
+		Cabin cabin = new Cabin();
+		cabin.setId(new Long(1));
+		cabin.setName("T");
+
+		//Cabin cabin = converter.DtoToModel(cabinDTO, Cabin.class);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(cabinDTO);
+
+		Mockito.when(converter.DtoToModel(cabinDTO, Cabin.class)).thenReturn(cabin);
+		Mockito.when(cabinService.save(cabin)).thenReturn(cabin);
+		Mockito.when(converter.modelToDTO(cabin, CabinDTO.class)).thenReturn(cabinDTO);
+		ResultActions result = this.mockMvc.perform(post("/api/cabins")
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("El nombre de la cabina debe contener entre 6 y 50 caracteres");
+
+	}
+
+	@Test
 	public void deleteVerbShouldReturnResponse() throws Exception {
 
 		Long id = new Long(1);
@@ -112,9 +193,30 @@ public class CabinControllerTest {
 
 		Mockito.when(cabinService.findById(id)).thenReturn(opCabin);
 
-		this.mockMvc.perform(delete("/api/cabins/" + 1)).andDo(print()).andExpect(status().isNoContent());
+		ResultActions result = this.mockMvc.perform(delete("/api/cabins/" + 1)).andDo(print()).andExpect(status().isNoContent());
 
 		Mockito.verify(cabinService, Mockito.times(1)).delete(opCabin.get());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("");
+	}
+
+	@Test
+	public void deleteVerbShouldEntityExist() throws Exception {
+
+		Long id = new Long(1);
+
+		Cabin cabin = new Cabin();
+		cabin.setName("Turista");
+		cabin.setId(new Long(5));
+		Optional<Cabin> opCabin = Optional.of(cabin);
+
+		Mockito.when(cabinService.findById(id)).thenReturn(opCabin);
+
+		ResultActions result = this.mockMvc.perform(delete("/api/cabins/" + 2)).andDo(print()).andExpect(status().is(400));
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("No existe una cabina con el id especificado");
 
 	}
 
@@ -154,4 +256,99 @@ public class CabinControllerTest {
 		assertThat(responseBody).isEqualTo("{\"id\":1,\"name\":\"Turista\"}");
 
 	}
+
+	@Test
+	public void patchVerbShouldHaveValidCabin() throws Exception {
+
+		Long id = new Long(1);
+
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+		cabinDTO.setName("Turista");
+
+		Optional<Cabin> opCabin = Optional.ofNullable(null);
+
+		Mockito.when(cabinService.findById(id)).thenReturn(opCabin);
+
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(cabinDTO);
+
+		ResultActions result = this.mockMvc.perform(patch("/api/cabins/" + 1)
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("No existe una cabina con el id especificado");
+
+	}
+
+	@Test
+	public void patchVerbShouldHaveCabinName() throws Exception {
+
+		Long id = new Long(1);
+
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+
+		Cabin cabin = new Cabin();
+		cabin.setId(cabinDTO.getId());
+		Optional<Cabin> opCabin = Optional.of(cabin);
+
+		Mockito.when(cabinService.findById(id)).thenReturn(opCabin);
+
+		cabin = opCabin.get();
+
+		Mockito.when(cabinService.save(cabin)).thenReturn(cabin);
+		Mockito.when(converter.modelToDTO(cabin, CabinDTO.class)).thenReturn(cabinDTO);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(cabinDTO);
+
+		ResultActions result = this.mockMvc.perform(patch("/api/cabins/" + 1)
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("El nombre de la cabina es obligatorio");
+
+	}
+
+	@Test
+	public void patchVerbShouldHaveValidCabinName() throws Exception {
+
+		Long id = new Long(1);
+
+		CabinDTO cabinDTO = new CabinDTO();
+		cabinDTO.setId(new Long(1));
+		cabinDTO.setName("T");
+
+		Cabin cabin = new Cabin();
+		cabin.setName(cabinDTO.getName());
+		cabin.setId(cabinDTO.getId());
+		Optional<Cabin> opCabin = Optional.of(cabin);
+
+		Mockito.when(cabinService.findById(id)).thenReturn(opCabin);
+
+		cabin = opCabin.get();
+
+		Mockito.when(cabinService.save(cabin)).thenReturn(cabin);
+		Mockito.when(converter.modelToDTO(cabin, CabinDTO.class)).thenReturn(cabinDTO);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(cabinDTO);
+
+		ResultActions result = this.mockMvc.perform(patch("/api/cabins/" + 1)
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isBadRequest());
+
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+		assertThat(responseBody).isEqualTo("El nombre de la cabina debe contener entre 6 y 50 caracteres");
+
+	}
+
 }

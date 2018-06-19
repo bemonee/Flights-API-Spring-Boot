@@ -2,8 +2,10 @@ package com.utn.tp5.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,12 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -97,7 +101,32 @@ public class PriceControllerTest {
 
 	@Test
 	public void testCreate() throws Exception {
+		Airport originAirport = new Airport();
+		originAirport.setIata("MDP");
+		Airport destinationAirport = new Airport();
+		destinationAirport.setIata("AEP");
 
+		Cabin cabin = new Cabin();
+		cabin.setId(new Long(1));
+		Optional<Cabin> optCabin = Optional.of(cabin);
+
+		Route route = new Route();
+		route.setOriginAirport(originAirport);
+		route.setDestinationAiport(destinationAirport);
+
+		Mockito.when(airportService.findByIata(originAirport.getIata())).thenReturn(originAirport);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonContent = mapper.writeValueAsString(optCabin);
+
+		ResultActions result = this.mockMvc.perform(patch("/api/prices/" + originAirport.getIata())
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isNotFound());
+
+		String responseBody = result.andReturn().getResponse().getContentAsString();
+
+		assertThat(responseBody).isEqualTo("");
 	}
 
 	@Test
