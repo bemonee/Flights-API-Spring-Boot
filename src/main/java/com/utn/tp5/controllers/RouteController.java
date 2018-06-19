@@ -193,9 +193,7 @@ public class RouteController {
 		}
 
 		Route route = this.routeService.findByOriginAndDestination(airportOrigin, airportDestination);
-
 		boolean applyChanges = false;
-
 		if (route == null) {
 			return new ResponseEntity<>("No existe un ruta con esa iata de origen y esa iata de destino",
 					HttpStatus.BAD_REQUEST);
@@ -205,17 +203,30 @@ public class RouteController {
 			String iataDestinationDTO = routeDTO.getDestination().getIata();
 
 			if (iataOriginDTO != null && iataDestinationDTO != null) {
-				if (iataOriginDTO.length() < 2 || iataOriginDTO.length() > 3 && iataDestinationDTO.length() < 2
-						|| iataDestinationDTO.length() > 3) {
+				if ((iataOriginDTO.length() < 2 || iataOriginDTO.length() > 3)
+						|| (iataDestinationDTO.length() < 2 || iataDestinationDTO.length() > 3)) {
 					return new ResponseEntity<>("El codigo iata debe contener entre 2 y 3 caracteres",
 							HttpStatus.BAD_REQUEST);
 				} else {
-					Route checkRoute = this.routeService.findByOriginAndDestination(airportOrigin, airportDestination);
+					
+					Airport newOrigin = this.airportService.findByIata(iataOriginDTO);
+					if (newOrigin == null) {
+						return new ResponseEntity<>("No existe un aeropuerto origen con el nuevo codigo iata especificado",
+								HttpStatus.BAD_REQUEST);
+					}
+					
+					Airport newDestination = this.airportService.findByIata(iataDestinationDTO);
+					if (newDestination == null) {
+						return new ResponseEntity<>("No existe un aeropuerto destino con el nuevo codigo iata especificado",
+								HttpStatus.BAD_REQUEST);
+					}
+					
+					Route checkRoute = this.routeService.findByOriginAndDestination(newOrigin, newDestination);
 					if (checkRoute != null) {
 						return new ResponseEntity<>("Ya existe una ruta con esos codigos iata", HttpStatus.CONFLICT);
 					} else {
-						route.setOriginAirport(airportOrigin);
-						route.setDestinationAiport(airportDestination);
+						route.setOriginAirport(newOrigin);
+						route.setDestinationAiport(newDestination);
 						applyChanges = true;
 					}
 				}
